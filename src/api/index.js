@@ -4,7 +4,9 @@ import queryString from "query-string";
 const API_URL = "https://5b1b2fcf6e0fd400146aaefc.mockapi.io/api/v1";
 
 const handleServerErrors = response => {
-  if (response.ok && response.status === 200) return response.json();
+  if (response.ok) {
+    return response.json();
+  }
   switch (response.status) {
     case 403:
       NotificationManager.error("Acceso denegado");
@@ -17,6 +19,8 @@ const handleServerErrors = response => {
       break;
     case 500:
       NotificationManager.error("Ha ocurrido un error con el servidor");
+      break;
+    default:
       break;
   }
 };
@@ -55,8 +59,20 @@ function Delete(route, params = {}) {
 }
 
 export const Users = {
+  createUser(data) {
+    return Post("/users", data);
+  },
+
   getUsers(params) {
     return Get("/users", params);
+  },
+
+  getUser(id, params) {
+    return Get(`/users/${id}`, params);
+  },
+
+  updateUser(id, data) {
+    return Put(`/users/${id}`, data);
   },
 
   deleteUser(id) {
@@ -64,6 +80,29 @@ export const Users = {
   }
 };
 
+export const Tweets = {
+  createTweet(userId, data) {
+    return Post(`/users/${userId}/tweets`, data);
+  },
+
+  getTweetsByUser(id, params) {
+    return Get(`/users/${id}/tweets`, params);
+  },
+
+  getTweet(userId, tweetId, params) {
+    return Get(`/users/${userId}/tweets/${tweetId}`, params);
+  },
+
+  updateTweet(userId, tweetId, data) {
+    return Put(`/users/${userId}/tweets/${tweetId}`, data);
+  },
+
+  deleteTweet(userId, tweetId) {
+    return Delete(`/users/${userId}/tweets/${tweetId}`);
+  }
+};
+
 export default {
-  Users
+  Users,
+  Tweets
 };

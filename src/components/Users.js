@@ -1,24 +1,16 @@
 import React, { Component } from "react";
-import { Card, Icon, Layout, Row, Col, Button, Modal, Form } from "antd";
+import { Card, Icon, Layout, Row, Col, Button } from "antd";
 import { Link } from "react-router-dom";
 import { NotificationManager } from "react-notifications";
-
+import ModalNewUser from "./ModalNewUser";
+import uuid from "uuid";
 import API from "../api";
 
 const { Meta } = Card;
 const { Header, Content } = Layout;
 
-const ModalCreateUSer = ({ visible, onCancel, onOk }) => (
-  <Modal
-    visible={visible}
-    onCancel={onCancel}
-    onOk={() => {
-      console.log("funciona");
-    }}
-  >
-    Añadir usuario
-  </Modal>
-);
+const random = (min, max) => Math.floor(Math.random() * max) + min;
+
 export default class Users extends Component {
   state = {
     users: [],
@@ -32,6 +24,38 @@ export default class Users extends Component {
 
   toggleModal = () => {
     this.setState(state => ({ ...state, modalVisible: !state.modalVisible }));
+  };
+
+  createUser = async values => {
+    this.toggleModal();
+
+    const id = uuid();
+    const newUser = {
+      ...values,
+      createdAt: new Date().toISOString(),
+      avatar: `https://picsum.photos/200/300/?image=${random(300, 1)}`,
+      screen_name: values.user
+    };
+
+    this.setState(state => ({
+      ...state,
+      users: [{ ...newUser, id }, ...state.users]
+    }));
+
+    try {
+      const user = await API.Users.createUser(newUser);
+
+      this.setState(state => ({
+        ...state,
+        users: [...state.users.map(u => (u.id === id ? user : u))]
+      }));
+    } catch (error) {
+      NotificationManager.error("Ha ocurrido un error al crear el usuario");
+      this.setState(state => ({
+        ...state,
+        users: [...state.users.filter(u => u.id !== id)]
+      }));
+    }
   };
 
   deleteUser = async id => {
@@ -66,15 +90,27 @@ export default class Users extends Component {
               <Col key={user.id} xs={20} sm={16} md={12} lg={8}>
                 <Card
                   style={{ margin: 15 }}
-                  cover={<img alt="avatar" src={user.avatar} />}
+                  cover={
+                    <img
+                      width="70"
+                      height="380"
+                      alt="avatar"
+                      src={user.avatar}
+                    />
+                  }
                   actions={[
-                    <Link to={`/user/${user.id}`} state={user}>
+                    <Link
+                      to={Number.isInteger(+user.id) ? `/user/${user.id}` : ""}
+                      state={user}
+                    >
                       <Icon type="eye" />
                     </Link>,
-                    <Icon
-                      type="delete"
+                    <Button
+                      disabled={!Number.isInteger(+user.id)}
                       onClick={() => this.deleteUser(user.id)}
-                    />
+                    >
+                      <Icon type="delete" />
+                    </Button>
                   ]}
                 >
                   <Meta
@@ -86,7 +122,11 @@ export default class Users extends Component {
             ))}
           </Row>
         </Content>
-        <ModalCreateUSer onCancel={this.toggleModal} visible={modalVisible} />
+        <ModalNewUser
+          onCancel={this.toggleModal}
+          onOk={this.createUser}
+          visible={modalVisible}
+        />
       </Layout>
     );
   }
