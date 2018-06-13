@@ -101,7 +101,6 @@ export default class Users extends Component {
                   actions={[
                     <Link
                       to={Number.isInteger(+user.id) ? `/user/${user.id}` : ""}
-                      state={user}
                     >
                       <Icon type="eye" />
                     </Link>,
