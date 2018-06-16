@@ -33,7 +33,7 @@ export default class Users extends Component {
     const newUser = {
       ...values,
       createdAt: new Date().toISOString(),
-      avatar: `https://picsum.photos/200/300/?image=${random(300, 1)}`,
+      avatar: `https://picsum.photos/200/300/?image=${random(1, 300)}`,
       screen_name: values.user
     };
 
