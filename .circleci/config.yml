@@ -22,7 +22,7 @@ jobs:
       - run:
         name: "Build Project"
         command: yarn build
-  test/unit:
+  jest:
     docker:
       - image: circleci/node:8
         environment:
@@ -39,7 +39,7 @@ jobs:
         path: reports/junit
       - store_artifacts:
         path: reports/junit
-  test/integration:
+  cypress:
     docker:
       - image: cypress/base:8
         environment:
@@ -61,10 +61,10 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test/unit
+      - jest
         requires:
           - build
-      - test/integration
+      - cypress
         requires:
           - build
 
