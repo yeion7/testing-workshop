@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Layout, Avatar, List, Icon } from "antd";
-import TweetForm from "./TweetForm";
+import TweetForm from "../components/TweetForm";
+
+import { NotificationManager } from "react-notifications";
 
 import moment from "moment";
 
@@ -8,16 +10,22 @@ import API from "../api";
 
 const { Sider, Content } = Layout;
 
-const IconText = ({ type, text }) => (
+const IconText = ({ type, text, liked, onClick }) => (
   <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
+    <Icon
+      role="button"
+      onClick={onClick}
+      type={type}
+      style={{ marginRight: 8, color: `${liked ? "#CF4647" : ""}` }}
+    />
     {text}
   </span>
 );
 
 export default class TimeLine extends Component {
   state = {
-    user: {}
+    user: {},
+    liked: []
   };
 
   componentDidMount = async () => {
@@ -77,6 +85,63 @@ export default class TimeLine extends Component {
     }
   };
 
+  likeTweet = id => async () => {
+    const tweet = this.state.user.tweets.find(t => t.id === id);
+    const isLiked = this.state.liked.includes(id);
+
+    this.setState(state => ({
+      ...state,
+      user: {
+        ...state.user,
+        tweets: state.user.tweets.map(
+          tweet =>
+            tweet.id === id
+              ? {
+                  ...tweet,
+                  favorite_count: isLiked
+                    ? tweet.favorite_count - 1
+                    : tweet.favorite_count + 1
+                }
+              : tweet
+        )
+      },
+      liked: isLiked
+        ? state.liked.filter(likeId => likeId !== id)
+        : [...state.liked, id]
+    }));
+
+    const { user } = this.state;
+
+    try {
+      await API.Tweets.updateTweet(user.id, id, {
+        favorite_count: isLiked
+          ? tweet.favorite_count - 1
+          : tweet.favorite_count + 1
+      });
+    } catch (error) {
+      this.setState(state => ({
+        ...state,
+        user: {
+          ...state.user,
+          tweets: state.user.tweets.map(
+            tweet =>
+              tweet.id === id
+                ? {
+                    ...tweet,
+                    favorite_count: isLiked
+                      ? tweet.favorite_count + 1
+                      : tweet.favorite_count - 1
+                  }
+                : tweet
+          )
+        },
+        liked: state.liked.filter(likeId => likeId !== id)
+      }));
+
+      NotificationManager.error("Ha ocurrido un error :(");
+    }
+  };
+
   submitTweet = e => {
     const form = this.formRef.props.form;
     if (
@@ -89,8 +154,7 @@ export default class TimeLine extends Component {
   };
 
   render() {
-    const { user } = this.state;
-
+    const { user, liked } = this.state;
     if (!user) return;
     return (
       <div style={{ padding: 30 }}>
@@ -117,8 +181,12 @@ export default class TimeLine extends Component {
                   <List.Item
                     key={item.id}
                     actions={[
-                      <IconText type="heart-o" text={item.favorite_count} />,
-                      <IconText type="retweet" text={item.retweet_count} />,
+                      <IconText
+                        onClick={this.likeTweet(item.id)}
+                        liked={liked.includes(item.id)}
+                        type="heart"
+                        text={item.favorite_count}
+                      />,
                       <Icon
                         type="delete"
                         onClick={() => this.deleteTweet(item.id)}

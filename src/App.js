@@ -4,8 +4,8 @@ import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import "./App.css";
 
-import Users from "./components/Users";
-import TimeLine from "./components/TimeLine";
+import Users from "./views/Users";
+import TimeLine from "./views/TimeLine";
 
 class App extends Component {
   render() {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Card, Icon, Layout, Row, Col, Button } from "antd";
 import { Link } from "react-router-dom";
 import { NotificationManager } from "react-notifications";
-import ModalNewUser from "./ModalNewUser";
+import ModalNewUser from "../components/ModalNewUser";
 import uuid from "uuid";
 import API from "../api";
 
