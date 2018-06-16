@@ -33,7 +33,7 @@ jobs:
           TERM: xterm
     working_directory: ~/app
     steps:
-      - run: ls
+      - run: ls -la
       - attach_workspace:
           at: ~/app
       - run: yarn install
@@ -54,7 +54,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
-      - run: ls
+      - run: ls -la
       - run: yarn install
       - run: 
           name: "Jest Test"
@@ -79,7 +79,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
-      - run: ls
+      - run: ls -la
       - run: yarn install
       - run:
           name: Cypress tests
