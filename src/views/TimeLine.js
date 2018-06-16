@@ -31,7 +31,12 @@ export default class TimeLine extends Component {
   componentDidMount = async () => {
     const { match } = this.props;
     const user = await API.Users.getUser(match.params.id);
-    this.setState({ user });
+    const likes = JSON.parse(localStorage.getItem("liked"));
+
+    this.setState({
+      user,
+      liked: likes && likes[user.id] ? likes[user.id] : []
+    });
   };
 
   saveFormRef = formRef => {
@@ -86,8 +91,24 @@ export default class TimeLine extends Component {
   };
 
   likeTweet = id => async () => {
-    const tweet = this.state.user.tweets.find(t => t.id === id);
-    const isLiked = this.state.liked.includes(id);
+    const { user, liked } = this.state;
+
+    const tweet = user.tweets.find(t => t.id === id);
+    const isLiked = liked.includes(id);
+
+    const likes = JSON.parse(localStorage.getItem("liked")) || {};
+
+    localStorage.setItem(
+      "liked",
+      JSON.stringify({
+        ...likes,
+        [user.id]: likes[user.id]
+          ? likes[user.id].includes(id)
+            ? likes[user.id].filter(likeId => likeId !== id)
+            : [...likes[user.id], id]
+          : [id]
+      })
+    );
 
     this.setState(state => ({
       ...state,
@@ -109,8 +130,6 @@ export default class TimeLine extends Component {
         ? state.liked.filter(likeId => likeId !== id)
         : [...state.liked, id]
     }));
-
-    const { user } = this.state;
 
     try {
       await API.Tweets.updateTweet(user.id, id, {
