@@ -9,19 +9,19 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-        key: v1-deps-{{ .Branch }}
-        key: v1-deps
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v1-deps-{{ .Branch }}
+          key: v1-deps
       - run: 
-        name: "Install dependencies"
-        command: yarn install --frozen-lockfile
+          name: "Install dependencies"
+          command: yarn install --frozen-lockfile
       - save_cache:
-        key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-        paths:
-          - ~/.cache
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ~/.cache
       - run:
-        name: "Build Project"
-        command: yarn build
+          name: "Build Project"
+          command: yarn build
   jest:
     docker:
       - image: circleci/node:8
@@ -30,14 +30,14 @@ jobs:
     working_directory: ~/app
     steps:
       - run: 
-        name: "Jest Test"
-        command: yarn jest -- --ci --testResultsProcessor="jest-junit"
-        environment:
-          JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+          name: "Jest Test"
+          command: yarn jest -- --ci --testResultsProcessor="jest-junit"
+          environment:
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
       - store_test_results:
-        path: reports/junit
+          path: reports/junit
       - store_artifacts:
-        path: reports/junit
+          path: reports/junit
   cypress:
     docker:
       - image: cypress/base:8
@@ -46,24 +46,24 @@ jobs:
     working_directory: ~/app
     steps:
       - run:
-        name: Cypress tests
-        command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
+          name: Cypress tests
+          command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
       - store_test_results:
-        path: multiple-results
+          path: multiple-results
       - store_artifacts:
-        path: cypress/videos
+          path: cypress/videos
       - store_artifacts:
-        path: cypress/screenshots
+          path: cypress/screenshots
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
       - jest:
-        requires:
-          - build
+          requires:
+            - build
       - cypress:
-        requires:
-          - build
+          requires:
+            - build
 
 
