@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  - build:
     docker:
       - image: circleci/node:8
         environment:
@@ -16,13 +16,13 @@ jobs:
         name: "Install dependencies"
         command: yarn install --frozen-lockfile
       - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/.cache
+        key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+        paths:
+          - ~/.cache
       - run:
         name: "Build Project"
         command: yarn build
-  jest:
+  - jest:
     docker:
       - image: circleci/node:8
         environment:
@@ -39,7 +39,7 @@ jobs:
         path: reports/junit
       - store_artifacts:
         path: reports/junit
-  cypress:
+  - cypress:
     docker:
       - image: cypress/base:8
         environment:
@@ -51,11 +51,11 @@ jobs:
         name: Cypress tests
         command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
       - store_test_results:
-          path: multiple-results
+        path: multiple-results
       - store_artifacts:
-          path: cypress/videos
+        path: cypress/videos
       - store_artifacts:
-          path: cypress/screenshots
+        path: cypress/screenshots
 workflows:
   version: 2
   build_and_test:
