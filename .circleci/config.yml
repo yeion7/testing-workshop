@@ -23,7 +23,9 @@ jobs:
             - ~/.cache
       - persist_to_workspace:
           root: .
-          paths: .
+          paths: 
+            - .
+            - ~/.cache
   build: 
     docker:
       - image: circleci/node:8
@@ -40,7 +42,9 @@ jobs:
           command: yarn build
       - persist_to_workspace:
           root: .
-          paths: .
+          paths: 
+            - .
+            - ~/.cache
   jest:
     docker:
       - image: circleci/node:8
@@ -63,7 +67,9 @@ jobs:
           path: reports/junit
       - persist_to_workspace:
           root: .
-          paths: .
+          paths: 
+            - .
+            - ~/.cache
   cypress:
     docker:
       - image: cypress/base:8
@@ -86,7 +92,9 @@ jobs:
           path: cypress/screenshots
       - persist_to_workspace:
           root: .
-          paths: .
+          paths: 
+            - .
+            - ~/.cache
 workflows:
   version: 2
   build_and_test:
