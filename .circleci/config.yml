@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  - build:
+  build:
     docker:
       - image: circleci/node:8
         environment:
@@ -22,14 +22,13 @@ jobs:
       - run:
         name: "Build Project"
         command: yarn build
-  - jest:
+  jest:
     docker:
       - image: circleci/node:8
         environment:
           TERM: xterm
     working_directory: ~/app
     steps:
-      - checkout
       - run: 
         name: "Jest Test"
         command: yarn jest -- --ci --testResultsProcessor="jest-junit"
@@ -39,14 +38,13 @@ jobs:
         path: reports/junit
       - store_artifacts:
         path: reports/junit
-  - cypress:
+  cypress:
     docker:
       - image: cypress/base:8
         environment:
           TERM: xterm
     working_directory: ~/app
     steps:
-      - checkout
       - run:
         name: Cypress tests
         command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
@@ -61,10 +59,10 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - jest
+      - jest:
         requires:
           - build
-      - cypress
+      - cypress:
         requires:
           - build
 
