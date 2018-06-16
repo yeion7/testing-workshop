@@ -49,6 +49,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: yarn install
       - run: 
           name: "Jest Test"
           command: yarn jest -- --ci --testResultsProcessor="jest-junit"
@@ -70,9 +71,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: yarn install
       - run:
           name: Cypress tests
-          command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
+          command: npm run test:cypress -- --config fileServerFolder=build --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
       - store_test_results:
           path: multiple-results
       - store_artifacts:
