@@ -1,39 +1,71 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
 version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:7.10
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+      - image: circleci/node:8
+        environment:
+          TERM: xterm
+    working_directory: ~/app
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run: yarn install
-
+        key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+        key: v1-deps-{{ .Branch }}
+        key: v1-deps
+      - run: 
+        name: "Install dependencies"
+        command: yarn install --frozen-lockfile
       - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn test
+            - ~/.cache
+      - run:
+        name: "Build Project"
+        command: yarn build
+  test/unit:
+    docker:
+      - image: circleci/node:8
+        environment:
+          TERM: xterm
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: 
+        name: "Jest Test"
+        command: yarn jest -- --ci --testResultsProcessor="jest-junit"
+        environment:
+          JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+      - store_test_results:
+        path: reports/junit
+      - store_artifacts:
+        path: reports/junit
+  test/integration:
+    docker:
+      - image: cypress/base:8
+        environment:
+          TERM: xterm
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+        name: Cypress tests
+        command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
+      - store_test_results:
+          path: multiple-results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test/unit
+        requires:
+          - build
+      - test/integration
+        requires:
+          - build
 
 

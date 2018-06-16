@@ -12,12 +12,35 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "react-scripts": "1.1.4"
+    "cypress": "^3.0.1",
+    "dom-testing-library": "^2.6.0",
+    "faker": "^4.1.0",
+    "jest-junit": "^5.0.0",
+    "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.17.0",
+    "mocha-multi-reporters": "^1.1.7",
+    "react-scripts": "^2.0.0-next.66cc7a90",
+    "react-testing-library": "^3.1.7"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "npm run -s test:jest && npm run -s test:cypress",
+    "test:jest": "react-scripts test --env=jsdom",
+    "test:cypress": "cypress run",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "development": [
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 edge versions"
+    ],
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
   }
 }
