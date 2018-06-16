@@ -88,39 +88,35 @@ export default class Users extends Component {
           <Row gutter={16} align="middle" justify="center" type="flex">
             {users.map(user => (
               <Col key={user.id} xs={20} sm={16} md={12} lg={8}>
-                <Link to={Number.isInteger(+user.id) ? `/user/${user.id}` : ""}>
-                  <Card
-                    style={{ margin: 15 }}
-                    cover={
-                      <img
-                        width="70"
-                        height="380"
-                        alt="avatar"
-                        src={user.avatar}
-                      />
-                    }
-                    actions={[
-                      <Link
-                        to={
-                          Number.isInteger(+user.id) ? `/user/${user.id}` : ""
-                        }
-                      >
-                        <Icon type="eye" />
-                      </Link>,
-                      <Button
-                        disabled={!Number.isInteger(+user.id)}
-                        onClick={() => this.deleteUser(user.id)}
-                      >
-                        <Icon type="delete" />
-                      </Button>
-                    ]}
-                  >
-                    <Meta
-                      title={user.name}
-                      description={`@${user.screen_name}`}
+                <Card
+                  style={{ margin: 15 }}
+                  cover={
+                    <img
+                      width="70"
+                      height="380"
+                      alt="avatar"
+                      src={user.avatar}
                     />
-                  </Card>
-                </Link>
+                  }
+                  actions={[
+                    <Link
+                      to={Number.isInteger(+user.id) ? `/user/${user.id}` : ""}
+                    >
+                      <Icon type="eye" />
+                    </Link>,
+                    <Button
+                      disabled={!Number.isInteger(+user.id)}
+                      onClick={() => this.deleteUser(user.id)}
+                    >
+                      <Icon type="delete" />
+                    </Button>
+                  ]}
+                >
+                  <Meta
+                    title={user.name}
+                    description={`@${user.screen_name}`}
+                  />
+                </Card>
               </Col>
             ))}
           </Row>
