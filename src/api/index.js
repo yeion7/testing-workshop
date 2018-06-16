@@ -1,8 +1,6 @@
 import { NotificationManager } from "react-notifications";
 import qs from "qs";
 
-const API_URL = "https://5b1b2fcf6e0fd400146aaefc.mockapi.io/api/v1";
-
 const handleServerErrors = response => {
   if (response.ok) {
     return response.json();
@@ -27,7 +25,7 @@ const handleServerErrors = response => {
 
 const request = (method, endpoint, query, body) => {
   const queryParsed = qs.stringify(query);
-  const url = `${API_URL}${endpoint}?${queryParsed}`;
+  const url = `${process.env.REACT_APP_API}${endpoint}?${queryParsed}`;
   const params = {
     method,
     headers: {
