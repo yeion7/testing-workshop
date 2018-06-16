@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  checkout_code:
     docker:
       - image: circleci/node:8
         environment:
@@ -8,6 +8,8 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/app
       - restore_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           key: v1-deps-{{ .Branch }}
@@ -19,9 +21,25 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache
+      - persist_to_workspace:
+          root: .
+          paths: .
+  build: 
+    docker:
+      - image: circleci/node:8
+        environment:
+          TERM: xterm
+    working_directory: ~/app
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run: yarn install
       - run:
           name: "Build Project"
           command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths: .
   jest:
     docker:
       - image: circleci/node:8
@@ -29,6 +47,8 @@ jobs:
           TERM: xterm
     working_directory: ~/app
     steps:
+      - attach_workspace:
+          at: ~/app
       - run: 
           name: "Jest Test"
           command: yarn jest -- --ci --testResultsProcessor="jest-junit"
@@ -38,6 +58,9 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
+      - persist_to_workspace:
+          root: .
+          paths: .
   cypress:
     docker:
       - image: cypress/base:8
@@ -45,6 +68,8 @@ jobs:
           TERM: xterm
     working_directory: ~/app
     steps:
+      - attach_workspace:
+          at: ~/app
       - run:
           name: Cypress tests
           command: npm run test:cypress --  --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
@@ -54,11 +79,17 @@ jobs:
           path: cypress/videos
       - store_artifacts:
           path: cypress/screenshots
+      - persist_to_workspace:
+          root: .
+          paths: .
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - checkout_code
+      - build:
+          requires:
+            - checkout_code
       - jest:
           requires:
             - build
