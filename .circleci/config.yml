@@ -16,13 +16,14 @@ jobs:
           key: v1-deps
       - run: 
           name: "Install dependencies"
-          command: yarn install --frozen-lockfile
+          command: npm ci
       - save_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
+            - ~/.npm
             - ~/.cache
       - persist_to_workspace:
-          root: .
+          root: /root/app
           paths: .
   build: 
     docker:
@@ -37,12 +38,11 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           key: v1-deps-{{ .Branch }}
           key: v1-deps
-      - run: yarn install
       - run:
           name: "Build Project"
-          command: yarn build
+          command: npm run build
       - persist_to_workspace:
-          root: .
+          root: /root/app
           paths: .
   jest:
     docker:
@@ -57,7 +57,6 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           key: v1-deps-{{ .Branch }}
           key: v1-deps
-      - run: yarn install
       - run: 
           name: "Jest Test"
           command: yarn jest -- --ci --testResultsProcessor="jest-junit"
@@ -83,7 +82,8 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           key: v1-deps-{{ .Branch }}
           key: v1-deps
-      - run: yarn install
+      - run: ls -la /
+      - run: ls -la /root/.cache
       - run:
           name: Cypress tests
           command: $(npm bin)/cypress run --config fileServerFolder=build --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
@@ -104,9 +104,6 @@ workflows:
       - build:
           requires:
             - checkout_code
-      - jest:
-          requires:
-            - build
       - cypress:
           requires:
             - build
