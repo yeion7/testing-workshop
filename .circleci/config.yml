@@ -86,7 +86,7 @@ jobs:
       - run: yarn install
       - run:
           name: Cypress tests
-          command: npm run test:cypress -- --config fileServerFolder=build --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
+          command: $(npm bin)/cypress run --config fileServerFolder=build --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
       - store_test_results:
           path: multiple-results
       - store_artifacts:
