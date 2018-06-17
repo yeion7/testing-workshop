@@ -82,8 +82,7 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           key: v1-deps-{{ .Branch }}
           key: v1-deps
-      - run: ls -la /
-      - run: ls -la /root/.cache
+      - run: ls -la /home/circleci/.cache/Cypress/3.0.1
       - run:
           name: Cypress tests
           command: $(npm bin)/cypress run --config fileServerFolder=build --reporter mocha-multi-reporters --reporter-options configFile=cypress/reporters.json
