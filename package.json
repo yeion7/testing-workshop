@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "npm run -s test:jest && npm run -s test:cypress",
     "test:jest": "react-scripts test --env=jsdom",
-    "test:cypress": "cypress run",
+    "test:cypress": "$(npm bin)/cypress run",
     "eject": "react-scripts eject"
   },
   "browserslist": {
