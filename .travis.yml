@@ -11,5 +11,8 @@ cache:
 install:
   - npm ci
 
+before_script:
+  - npm run build
+
 script:
-  - $(npm bin)/cypress run
+  - npm run test
