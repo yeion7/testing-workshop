@@ -23,7 +23,7 @@ jobs:
             - ~/.npm
             - ~/.cache
       - persist_to_workspace:
-          root: /root/app
+          root: .
           paths: .
   build: 
     docker:
@@ -42,7 +42,7 @@ jobs:
           name: "Build Project"
           command: npm run build
       - persist_to_workspace:
-          root: /root/app
+          root: .
           paths: .
   jest:
     docker:
