@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - 10
 
+notifications:
+  email: false
 cache:
   directories:
     - node_modules
@@ -10,9 +12,13 @@ cache:
 
 install:
   - npm ci
+  - npm audit
 
 before_script:
   - npm run build
 
 script:
   - npm run test
+
+branches:
+  only: master
