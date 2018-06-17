@@ -20,12 +20,12 @@ jobs:
       - save_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
-            - .cache
+            - ~/.cache
       - persist_to_workspace:
           root: .
           paths: 
             - .
-            - .cache
+            - ./.cache
   build: 
     docker:
       - image: circleci/node:8
@@ -44,7 +44,7 @@ jobs:
           root: .
           paths: 
             - .
-            - .cache
+            - ./.cache
   jest:
     docker:
       - image: circleci/node:8
@@ -69,7 +69,7 @@ jobs:
           root: .
           paths: 
             - .
-            - .cache
+            - ./.cache
   cypress:
     docker:
       - image: cypress/base:8
@@ -94,7 +94,7 @@ jobs:
           root: .
           paths: 
             - .
-            - .cache
+            - ./.cache
 workflows:
   version: 2
   build_and_test:
