@@ -23,9 +23,7 @@ jobs:
             - ~/.cache
       - persist_to_workspace:
           root: .
-          paths: 
-            - .
-            - ./.cache
+          paths: .
   build: 
     docker:
       - image: circleci/node:8
@@ -33,18 +31,19 @@ jobs:
           TERM: xterm
     working_directory: ~/app
     steps:
-      - run: ls -la
       - attach_workspace:
           at: ~/app
+      - restore_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v1-deps-{{ .Branch }}
+          key: v1-deps
       - run: yarn install
       - run:
           name: "Build Project"
           command: yarn build
       - persist_to_workspace:
           root: .
-          paths: 
-            - .
-            - ./.cache
+          paths: .
   jest:
     docker:
       - image: circleci/node:8
@@ -54,7 +53,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
-      - run: ls -la
+      - restore_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v1-deps-{{ .Branch }}
+          key: v1-deps
       - run: yarn install
       - run: 
           name: "Jest Test"
@@ -67,9 +69,7 @@ jobs:
           path: reports/junit
       - persist_to_workspace:
           root: .
-          paths: 
-            - .
-            - ./.cache
+          paths: .
   cypress:
     docker:
       - image: cypress/base:8
@@ -79,7 +79,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
-      - run: ls -la
+      - restore_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v1-deps-{{ .Branch }}
+          key: v1-deps
       - run: yarn install
       - run:
           name: Cypress tests
@@ -92,9 +95,7 @@ jobs:
           path: cypress/screenshots
       - persist_to_workspace:
           root: .
-          paths: 
-            - .
-            - ./.cache
+          paths: .
 workflows:
   version: 2
   build_and_test:
