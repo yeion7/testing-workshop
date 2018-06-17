@@ -14,10 +14,9 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           key: v1-deps-{{ .Branch }}
           key: v1-deps
-      - run: npm i -g npm
       - run: 
           name: "Install dependencies"
-          command: npm ci
+          command: npm install
       - save_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
