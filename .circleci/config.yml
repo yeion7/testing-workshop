@@ -20,7 +20,7 @@ jobs:
       - save_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
-            - ~/.cache
+            - .cache
       - persist_to_workspace:
           root: .
           paths: 
