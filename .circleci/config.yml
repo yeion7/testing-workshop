@@ -2,7 +2,7 @@ version: 2
 jobs:
   checkout_code:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:9
         environment:
           TERM: xterm
     working_directory: ~/app
@@ -27,7 +27,7 @@ jobs:
           paths: .
   build: 
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:9
         environment:
           TERM: xterm
     working_directory: ~/app
@@ -46,7 +46,7 @@ jobs:
           paths: .
   jest:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:9
         environment:
           TERM: xterm
     working_directory: ~/app
@@ -71,7 +71,7 @@ jobs:
           paths: .
   cypress:
     docker:
-      - image: cypress/base:8
+      - image: cypress/base:9
         environment:
           TERM: xterm
     working_directory: ~/app
