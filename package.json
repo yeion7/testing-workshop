@@ -15,7 +15,7 @@
     "cypress": "^3.0.1",
     "dom-testing-library": "^2.6.0",
     "faker": "^4.1.0",
-    "react-scripts": "^2.0.0-next.66cc7a90",
+    "react-scripts": "2.0.0-next.3e165448",
     "react-testing-library": "^3.1.7"
   },
   "scripts": {
@@ -25,6 +25,14 @@
     "test:jest": "react-scripts test --env=jsdom",
     "test:cypress": "cypress run --config fileServerFolder=build",
     "eject": "react-scripts eject"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!<rootDir>/src/api/*.{js}",
+      "!<rootDir>/src/registerServiceWorker.js",
+      "!<rootDir>/src/setupTests.js"
+    ]
   },
   "browserslist": {
     "development": [
