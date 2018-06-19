@@ -12,7 +12,6 @@ cache:
 
 install:
   - npm ci
-  - npm audit
 
 before_script:
   - npm run build
