@@ -31,6 +31,17 @@ describe("TimeLine work", () => {
     await wait();
     expect(getByText(userData.name)).toBeTruthy();
   });
+  test("should not render if not pass user data", async () => {
+    API.Users.getUser.mockImplementationOnce(() => {
+      return Promise.resolve({});
+    });
+    const { getByText } = render(<TimeLine match={params} />);
+
+    await wait();
+    expect(() => {
+      getByText(userData.name);
+    }).toThrowError();
+  });
 
   test("should add a message", async () => {
     API.Users.getUser.mockImplementationOnce(() => {
@@ -192,5 +203,27 @@ describe("TimeLine work", () => {
     rerender();
     await wait();
     expect(likeButton).toHaveStyle("color: rgb(207, 70, 71);");
+  });
+
+  test("should dislike a tweet", async () => {
+    API.Users.getUser.mockImplementationOnce(() => {
+      return Promise.resolve(userData);
+    });
+
+    const {
+      tweets: [tweet]
+    } = userData;
+
+    const { getByTestId, debug, getByText } = render(
+      <TimeLine match={params} />
+    );
+
+    await wait();
+    const likeButton = getByTestId(`favorite-${tweet.id}`);
+    Simulate.click(likeButton);
+    Simulate.click(likeButton);
+
+    expect(likeButton).not.toHaveStyle("color: rgb(207, 70, 71);");
+    expect(getByText(String(tweet.favorite_count))).toBeTruthy();
   });
 });
