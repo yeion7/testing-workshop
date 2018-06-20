@@ -3,7 +3,6 @@ import TimeLine from "../TimeLine";
 import API from "../../api";
 import { userData } from "./__fixtures__/";
 import faker from "faker";
-import "dom-testing-library/extend-expect";
 import {
   cleanup,
   render,

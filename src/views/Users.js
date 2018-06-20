@@ -100,11 +100,13 @@ export default class Users extends Component {
                   }
                   actions={[
                     <Link
+                      data-testid={`showUser-${user.id}`}
                       to={Number.isInteger(+user.id) ? `/user/${user.id}` : ""}
                     >
                       <Icon type="eye" />
                     </Link>,
                     <Button
+                      data-testid={`deleteUser-${user.id}`}
                       disabled={!Number.isInteger(+user.id)}
                       onClick={() => this.deleteUser(user.id)}
                     >
