@@ -10,9 +10,10 @@ import API from "../api";
 
 const { Sider, Content } = Layout;
 
-const IconText = ({ type, text, liked, onClick }) => (
+const IconText = ({ type, text, liked, onClick, testId }) => (
   <span>
     <Icon
+      data-testid={testId}
       role="button"
       onClick={onClick}
       type={type}
@@ -92,23 +93,8 @@ export default class TimeLine extends Component {
 
   likeTweet = id => async () => {
     const { user, liked } = this.state;
-
     const tweet = user.tweets.find(t => t.id === id);
     const isLiked = liked.includes(id);
-
-    const likes = JSON.parse(localStorage.getItem("liked")) || {};
-
-    localStorage.setItem(
-      "liked",
-      JSON.stringify({
-        ...likes,
-        [user.id]: likes[user.id]
-          ? likes[user.id].includes(id)
-            ? likes[user.id].filter(likeId => likeId !== id)
-            : [...likes[user.id], id]
-          : [id]
-      })
-    );
 
     this.setState(state => ({
       ...state,
@@ -137,22 +123,26 @@ export default class TimeLine extends Component {
           ? tweet.favorite_count - 1
           : tweet.favorite_count + 1
       });
+
+      const likes = JSON.parse(localStorage.getItem("liked")) || {};
+
+      localStorage.setItem(
+        "liked",
+        JSON.stringify({
+          ...likes,
+          [user.id]: likes[user.id]
+            ? likes[user.id].includes(id)
+              ? likes[user.id].filter(likeId => likeId !== id)
+              : [...likes[user.id], id]
+            : [id]
+        })
+      );
     } catch (error) {
       this.setState(state => ({
         ...state,
         user: {
           ...state.user,
-          tweets: state.user.tweets.map(
-            tweet =>
-              tweet.id === id
-                ? {
-                    ...tweet,
-                    favorite_count: isLiked
-                      ? tweet.favorite_count + 1
-                      : tweet.favorite_count - 1
-                  }
-                : tweet
-          )
+          tweets: state.user.tweets.map(t => (t.id === id ? tweet : t))
         },
         liked: state.liked.filter(likeId => likeId !== id)
       }));
@@ -201,12 +191,15 @@ export default class TimeLine extends Component {
                     key={item.id}
                     actions={[
                       <IconText
+                        testId={`favorite-${item.id}`}
                         onClick={this.likeTweet(item.id)}
                         liked={liked.includes(item.id)}
                         type="heart"
                         text={item.favorite_count}
                       />,
                       <Icon
+                        data-testid={`delete-${item.id}`}
+                        role="button"
                         type="delete"
                         onClick={() => this.deleteTweet(item.id)}
                       />
