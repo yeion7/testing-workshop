@@ -1,6 +1,6 @@
 context("Tweets", () => {
   beforeEach(() => {
-    cy.visit("localhost:3000/");
+    cy.visit("/");
   });
 
   it("can create a tweet", () => {
