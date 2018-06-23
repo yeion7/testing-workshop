@@ -19,7 +19,7 @@ export default class Users extends Component {
 
   componentDidMount = async () => {
     const users = await API.Users.getUsers();
-    this.setState({ users });
+    this.setState({ users: users || [] });
   };
 
   toggleModal = () => {
@@ -85,43 +85,50 @@ export default class Users extends Component {
           </Button>
         </Header>
         <Content>
-          <Row gutter={16} align="middle" justify="center" type="flex">
-            {users.map(user => (
-              <Col key={user.id} xs={20} sm={16} md={12} lg={8}>
-                <Card
-                  style={{ margin: 15 }}
-                  cover={
-                    <img
-                      width="70"
-                      height="380"
-                      alt="avatar"
-                      src={user.avatar}
+          {users.length === 0 ? (
+            <h4>No existen usuarios :(</h4>
+          ) : (
+            <Row gutter={16} align="middle" justify="center" type="flex">
+              {users.map(user => (
+                <Col key={user.id} xs={20} sm={16} md={12} lg={8}>
+                  <Card
+                    style={{ margin: 15 }}
+                    cover={
+                      <img
+                        width="70"
+                        height="380"
+                        alt="avatar"
+                        src={user.avatar}
+                      />
+                    }
+                    actions={
+                      Number.isInteger(+user.id)
+                        ? [
+                            <Link
+                              data-testid={`showUser-${user.id}`}
+                              to={`/user/${user.id}`}
+                            >
+                              <Icon type="eye" />
+                            </Link>,
+                            <Button
+                              data-testid={`deleteUser-${user.id}`}
+                              onClick={() => this.deleteUser(user.id)}
+                            >
+                              <Icon type="delete" />
+                            </Button>
+                          ]
+                        : null
+                    }
+                  >
+                    <Meta
+                      title={user.name}
+                      description={`@${user.screen_name}`}
                     />
-                  }
-                  actions={[
-                    <Link
-                      data-testid={`showUser-${user.id}`}
-                      to={Number.isInteger(+user.id) ? `/user/${user.id}` : ""}
-                    >
-                      <Icon type="eye" />
-                    </Link>,
-                    <Button
-                      data-testid={`deleteUser-${user.id}`}
-                      disabled={!Number.isInteger(+user.id)}
-                      onClick={() => this.deleteUser(user.id)}
-                    >
-                      <Icon type="delete" />
-                    </Button>
-                  ]}
-                >
-                  <Meta
-                    title={user.name}
-                    description={`@${user.screen_name}`}
-                  />
-                </Card>
-              </Col>
-            ))}
-          </Row>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
         </Content>
         <ModalNewUser
           onCancel={this.toggleModal}

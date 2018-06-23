@@ -1,25 +1,49 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import "cypress-testing-library/add-commands";
+import user from "../fixtures/user.json";
+
+Cypress.Commands.add("createUser", () => {
+  cy.contains("usuario").click();
+  cy.queryByLabelText("Nombre")
+    .type(user.name)
+    .should("have.value", user.name);
+
+  cy.queryByLabelText("Usuario")
+    .type(user.alias)
+    .should("have.value", user.alias);
+
+  cy.queryByLabelText("Descripción")
+    .type(user.description)
+    .should("have.value", user.description);
+
+  cy.get(".ant-btn-primary")
+    .contains("Crear")
+    .click({ force: true });
+});
+
+Cypress.Commands.add("deleteUser", () => {
+  cy.get('*[data-testid^="deleteUser"]').click({
+    force: true,
+    multiple: true
+  });
+
+  cy.get(".ant-layout-content")
+    .contains("usuarios")
+    .should("have.text", "No existen usuarios :(");
+});
+
+Cypress.Commands.add("showUser", () => {
+  cy.get('*[data-testid^="showUser-"]')
+    .first()
+    .click({
+      force: true
+    });
+});
+
+Cypress.Commands.add("createTweet", () => {
+  cy.get("textarea")
+    .type("hola", { delay: 1 })
+    .type("{enter}");
+
+  cy.get(".ant-list-item").contains("hola");
+  cy.get('*[data-testid^="delete-"]').should("have.attr", "role", "button");
+});

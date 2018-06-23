@@ -47,7 +47,7 @@ class ModalNewUser extends Component {
             })(<Input />)}
           </FormItem>
           <FormItem label="Descripción">
-            {getFieldDecorator("description")(<Input type="textarea" />)}
+            {getFieldDecorator("description")(<Input />)}
           </FormItem>
         </Form>
       </Modal>

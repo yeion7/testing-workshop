@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.6.2",
+    "cypress-testing-library": "2.2.0",
     "qs": "^6.5.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
@@ -24,6 +25,7 @@
     "test": "npm run -s test:jest && npm run -s test:cypress",
     "test:jest": "react-scripts test --env=jsdom",
     "test:cypress": "cypress run --config fileServerFolder=build",
+    "test:cypress:open": "cypress open",
     "eject": "react-scripts eject"
   },
   "jest": {
