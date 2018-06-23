@@ -2,7 +2,7 @@ import user from "../fixtures/user.json";
 
 context("Users", () => {
   beforeEach(() => {
-    cy.visit("localhost:3000/");
+    cy.visit("/");
   });
 
   afterEach(() => {
