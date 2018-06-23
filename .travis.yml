@@ -11,10 +11,10 @@ cache:
     - ~/.cache
 
 install:
-  - npm ci
+  - yarn install
 
 before_script:
-  - npm run build
+  - yarn run build
 
 script:
-  - npm run test
+  - yarn run test
