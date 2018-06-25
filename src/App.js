@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
+import "antd/dist/antd.css";
 import "./App.css";
 
 import Users from "./views/Users";
