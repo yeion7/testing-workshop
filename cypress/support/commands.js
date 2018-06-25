@@ -21,7 +21,7 @@ Cypress.Commands.add("createUser", () => {
 });
 
 Cypress.Commands.add("deleteUser", () => {
-  cy.get('*[data-testid^="deleteUser"]').click({
+  cy.get(".ant-card-actions .ant-btn").click({
     force: true,
     multiple: true
   });
@@ -32,7 +32,7 @@ Cypress.Commands.add("deleteUser", () => {
 });
 
 Cypress.Commands.add("showUser", () => {
-  cy.get('*[data-testid^="showUser-"]')
+  cy.get(".ant-card-actions a")
     .first()
     .click({
       force: true
@@ -45,5 +45,5 @@ Cypress.Commands.add("createTweet", () => {
     .type("{enter}");
 
   cy.get(".ant-list-item").contains("hola");
-  cy.get('*[data-testid^="delete-"]').should("have.attr", "role", "button");
+  cy.get(".anticon-delete").should("have.attr", "role", "button");
 });

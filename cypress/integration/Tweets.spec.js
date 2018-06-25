@@ -1,6 +1,7 @@
 context("Tweets", () => {
   beforeEach(() => {
     cy.visit("/");
+    cy.title().contains("React");
   });
 
   it("can create a tweet", () => {
