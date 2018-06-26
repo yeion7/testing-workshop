@@ -3,7 +3,7 @@ import user from "../fixtures/user.json";
 context("Users", () => {
   beforeEach(() => {
     cy.visit("/");
-    cy.title().contains("React");
+    cy.title().should("include", "React App");
   });
 
   afterEach(() => {
