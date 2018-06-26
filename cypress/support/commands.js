@@ -32,7 +32,7 @@ Cypress.Commands.add("deleteUser", () => {
 });
 
 Cypress.Commands.add("showUser", () => {
-  cy.get(".ant-card-actions a")
+  cy.get(".ant-card-actions li a")
     .first()
     .click({
       force: true

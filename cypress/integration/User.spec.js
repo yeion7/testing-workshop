@@ -6,11 +6,6 @@ context("Users", () => {
     cy.title().should("include", "React App");
   });
 
-  afterEach(() => {
-    cy.visit("localhost:3000/");
-    cy.deleteUser();
-  });
-
   it("Can add a user", () => {
     cy.createUser();
 
