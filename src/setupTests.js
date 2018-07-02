@@ -1,4 +1,5 @@
 import "dom-testing-library/extend-expect";
+import 'react-testing-library/cleanup-after-each'
 
 class LocalStorageMock {
   constructor() {

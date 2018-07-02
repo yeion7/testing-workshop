@@ -2,9 +2,7 @@ import React from "react";
 import ModalNewUser from "../ModalNewUser";
 import {
   render,
-  wait,
-  renderIntoDocument,
-  Simulate
+  fireEvent
 } from "react-testing-library";
 
 import faker from "faker";
@@ -18,44 +16,45 @@ const data = {
   description: faker.lorem.paragraph()
 };
 
-describe("Create user form", () => {
+describe('modal', () => {
   test("should submit data filled on form", () => {
-    const { getByLabelText, getByText } = renderIntoDocument(
+    const { getByLabelText, getByText } = render(
       <ModalNewUser onOk={onOk} visible onCancel={onCancel} />
     );
 
     const name = getByLabelText("Nombre");
     name.value = data.name;
-    Simulate.change(name);
+    fireEvent.change(name);
     const user = getByLabelText("Usuario");
     user.value = data.user;
-    Simulate.change(user);
+    fireEvent.change(user);
     const description = getByLabelText("Descripción");
     description.value = data.description;
-    Simulate.change(description);
+    fireEvent.change(description);
 
     const button = getByText("Crear");
 
-    Simulate.click(button);
+    fireEvent.click(button);
     expect(onOk).toHaveBeenCalledWith(data);
   });
 
   test("should display help if not pass validation", () => {
-    const { getByLabelText, getByText } = renderIntoDocument(
+    const { getByLabelText, getByText } = render(
       <ModalNewUser onOk={onOk} visible onCancel={onCancel} />
     );
 
-    const name = getByLabelText("Nombre");
     const user = getByLabelText("Usuario");
     user.value = data.user;
-    Simulate.change(user);
+    fireEvent.change(user);
+
     const description = getByLabelText("Descripción");
+
     description.value = data.description;
-    Simulate.change(description);
+    fireEvent.change(description);
 
     const button = getByText("Crear");
 
-    Simulate.click(button);
+    fireEvent.click(button);
 
     const help = getByText(/Ingresa un nombre/);
     expect(help).toBeTruthy();

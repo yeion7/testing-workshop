@@ -6,12 +6,9 @@ import { MemoryRouter, Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import faker from "faker";
 import {
-  cleanup,
   render,
   wait,
-  Simulate,
-  fireEvent,
-  renderIntoDocument
+  fireEvent
 } from "react-testing-library";
 
 jest.mock("../../api");
@@ -51,7 +48,8 @@ describe("Users", () => {
     );
     await wait();
 
-    Simulate.click(getByTestId(`deleteUser-${userData.id}`));
+    fireEvent.click(getByTestId(`deleteUser-${userData.id}`));
+
     expect(() => {
       getByText(userData.name);
     }).toThrowError();
@@ -82,32 +80,34 @@ describe("Users", () => {
       return Promise.resolve({ id: "10", ...data });
     });
 
-    const { getByText, getByTestId, getByLabelText } = renderIntoDocument(
+    const {getByLabelText, getByText} = render(
       <MemoryRouter initialEntries={["/"]}>
         <Users />
       </MemoryRouter>
-    );
+    )
 
     await wait();
-    Simulate.click(getByText("Añadir usuario"));
+
+    fireEvent.click(getByText("Añadir usuario"));
 
     const name = getByLabelText("Nombre");
     name.value = data.name;
-    Simulate.change(name);
-    const user = getByLabelText("Usuario");
+    fireEvent.change(name);
+    
     user.value = data.user;
-    Simulate.change(user);
-    const description = getByLabelText("Descripción");
+    fireEvent.change(user);
+
     description.value = data.description;
-    Simulate.change(description);
+    fireEvent.change(description);
 
     const button = getByText("Crear");
 
-    Simulate.click(button);
-    await wait();
+    fireEvent.click(button);
 
     expect(API.Users.createUser).toHaveBeenCalled();
+
     await wait();
+
     expect(getByText(data.name)).toBeTruthy();
   });
 });

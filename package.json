@@ -17,7 +17,7 @@
     "dom-testing-library": "^2.6.0",
     "faker": "^4.1.0",
     "react-scripts": "2.0.0-next.3e165448",
-    "react-testing-library": "^3.1.7"
+    "react-testing-library": "^4.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

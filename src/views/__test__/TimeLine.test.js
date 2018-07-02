@@ -7,8 +7,7 @@ import {
   cleanup,
   render,
   wait,
-  renderIntoDocument,
-  Simulate
+  fireEvent
 } from "react-testing-library";
 
 jest.mock("../../api");
@@ -67,8 +66,8 @@ describe("TimeLine work", () => {
     const input = getByPlaceholderText(/happening?/);
     input.value = tweet;
 
-    Simulate.change(input);
-    Simulate.keyDown(input, {
+    fireEvent.change(input);
+    fireEvent.keyDown(input, {
       key: "Enter",
       keyCode: 13,
       which: 13,
@@ -104,7 +103,7 @@ describe("TimeLine work", () => {
 
     await wait();
 
-    Simulate.click(getByTestId(`delete-${tweet.id}`));
+    fireEvent.click(getByTestId(`delete-${tweet.id}`));
 
     expect(getByText("No data")).toBeTruthy();
     expect(API.Tweets.deleteTweet).toHaveBeenCalled();
@@ -127,7 +126,7 @@ describe("TimeLine work", () => {
     const { getByText, getByTestId } = render(<TimeLine match={params} />);
 
     await wait();
-    Simulate.click(getByTestId(`delete-${tweet.id}`));
+    fireEvent.click(getByTestId(`delete-${tweet.id}`));
     expect(getByText("No data")).toBeTruthy();
     await wait();
     expect(getByText(tweet.text)).toBeTruthy();
@@ -148,7 +147,7 @@ describe("TimeLine work", () => {
 
     await wait();
     const likeButton = getByTestId(`favorite-${tweet.id}`);
-    Simulate.click(likeButton);
+    fireEvent.click(likeButton);
 
     expect(likeButton).toHaveStyle("color: rgb(207, 70, 71);");
     expect(getByText(String(tweet.favorite_count + 1))).toBeTruthy();
@@ -174,7 +173,7 @@ describe("TimeLine work", () => {
 
     await wait();
     const likeButton = getByTestId(`favorite-${tweet.id}`);
-    Simulate.click(likeButton);
+    fireEvent.click(likeButton);
     await wait();
 
     expect(likeButton).not.toHaveStyle("color: rgb(207, 70, 71);");
@@ -196,7 +195,7 @@ describe("TimeLine work", () => {
 
     await wait();
     const likeButton = getByTestId(`favorite-${tweet.id}`);
-    Simulate.click(likeButton);
+    fireEvent.click(likeButton);
     await wait();
     expect(API.Tweets.updateTweet).toHaveBeenCalled();
     rerender();
@@ -219,8 +218,8 @@ describe("TimeLine work", () => {
 
     await wait();
     const likeButton = getByTestId(`favorite-${tweet.id}`);
-    Simulate.click(likeButton);
-    Simulate.click(likeButton);
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
 
     expect(likeButton).not.toHaveStyle("color: rgb(207, 70, 71);");
     expect(getByText(String(tweet.favorite_count))).toBeTruthy();

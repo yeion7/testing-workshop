@@ -38,12 +38,3 @@ Cypress.Commands.add("showUser", () => {
       force: true
     });
 });
-
-Cypress.Commands.add("createTweet", () => {
-  cy.get("textarea")
-    .type("hola", { delay: 1 })
-    .type("{enter}");
-
-  cy.get(".ant-list-item").contains("hola");
-  cy.get(".anticon-delete").should("have.attr", "role", "button");
-});
