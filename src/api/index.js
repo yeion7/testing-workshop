@@ -23,9 +23,11 @@ const handleServerErrors = response => {
   }
 };
 
+const STAGING_API = "https://5b2affe83a8ea3001418d7fa.mockapi.io/api/v1/"
+
 const request = (method, endpoint, query, body) => {
   const queryParsed = qs.stringify(query);
-  const url = `${process.env.REACT_APP_API}${endpoint}?${queryParsed}`;
+  const url = `${process.env.REACT_APP_API || STAGING_API}${endpoint}?${queryParsed}`;
   const params = {
     method,
     headers: {
