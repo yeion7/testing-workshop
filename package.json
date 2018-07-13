@@ -13,28 +13,12 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "cypress": "^3.0.1",
-    "dom-testing-library": "^2.6.0",
-    "faker": "^4.1.0",
-    "react-scripts": "2.0.0-next.3e165448",
-    "react-testing-library": "^4.1.0"
+    "react-scripts": "2.0.0-next.3e165448"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "npm run -s test:jest && npm run -s test:cypress",
-    "test:jest": "react-scripts test --env=jsdom",
-    "test:cypress": "cypress run --config fileServerFolder=build",
-    "test:cypress:open": "cypress open",
     "eject": "react-scripts eject"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!<rootDir>/src/api/*.{js}",
-      "!<rootDir>/src/registerServiceWorker.js",
-      "!<rootDir>/src/setupTests.js"
-    ]
   },
   "browserslist": {
     "development": [
