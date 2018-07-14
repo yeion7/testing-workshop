@@ -96,33 +96,33 @@ export default class TimeLine extends Component {
     const tweet = user.tweets.find(t => t.id === id);
     const isLiked = liked.includes(id);
 
-    this.setState(state => ({
-      ...state,
-      user: {
-        ...state.user,
-        tweets: state.user.tweets.map(
-          tweet =>
-            tweet.id === id
-              ? {
-                  ...tweet,
-                  favorite_count: isLiked
-                    ? tweet.favorite_count - 1
-                    : tweet.favorite_count + 1
-                }
-              : tweet
-        )
-      },
-      liked: isLiked
-        ? state.liked.filter(likeId => likeId !== id)
-        : [...state.liked, id]
-    }));
-
     try {
       await API.Tweets.updateTweet(user.id, id, {
         favorite_count: isLiked
           ? tweet.favorite_count - 1
           : tweet.favorite_count + 1
       });
+
+      this.setState(state => ({
+        ...state,
+        user: {
+          ...state.user,
+          tweets: state.user.tweets.map(
+            tweet =>
+              tweet.id === id
+                ? {
+                    ...tweet,
+                    favorite_count: isLiked
+                      ? tweet.favorite_count - 1
+                      : tweet.favorite_count + 1
+                  }
+                : tweet
+          )
+        },
+        liked: isLiked
+          ? state.liked.filter(likeId => likeId !== id)
+          : [...state.liked, id]
+      }));
 
       const likes = JSON.parse(localStorage.getItem("liked")) || {};
 
