@@ -22,8 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "npm run -s test:jest && npm run -s test:cypress",
-    "test:jest": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom",
     "test:cypress": "cypress run --config fileServerFolder=build",
     "test:cypress:open": "cypress open",
     "eject": "react-scripts eject"
