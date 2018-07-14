@@ -1,7 +1,7 @@
 import React from 'react'
 import TimeLine from '../TimeLine'
 import {render, wait} from 'react-testing-library'
-import {userData} from './__fixtures__/user'
+import {userData} from '../__fixtures__/user'
 import APIMock from '../../api'
 
 jest.mock('../../api')
@@ -18,7 +18,7 @@ describe('TimeLine', () => {
       return Promise.resolve(userData)
     })
     
-    const { debug } = render(<TimeLine match={match}/>)
+    const { debug, getByText } = render(<TimeLine match={match}/>)
 
     await wait()
     debug()
