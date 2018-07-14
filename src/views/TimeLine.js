@@ -69,16 +69,17 @@ export default class TimeLine extends Component {
     const { user } = this.state;
     const tweet = user.tweets.find(t => t.id === id);
 
-    this.setState(state => ({
-      ...state,
-      user: {
-        ...state.user,
-        tweets: [...state.user.tweets.filter(t => t.id !== id)]
-      }
-    }));
-
     try {
       await API.Tweets.deleteTweet(user.id, id);
+
+      this.setState(state => ({
+        ...state,
+        user: {
+          ...state.user,
+          tweets: [...state.user.tweets.filter(t => t.id !== id)]
+        }
+      }));
+
     } catch (error) {
       this.setState(state => ({
         ...state,
@@ -103,11 +104,11 @@ export default class TimeLine extends Component {
           tweet =>
             tweet.id === id
               ? {
-                  ...tweet,
-                  favorite_count: isLiked
-                    ? tweet.favorite_count - 1
-                    : tweet.favorite_count + 1
-                }
+                ...tweet,
+                favorite_count: isLiked
+                  ? tweet.favorite_count - 1
+                  : tweet.favorite_count + 1
+              }
               : tweet
         )
       },
@@ -166,7 +167,7 @@ export default class TimeLine extends Component {
     if (!user) return;
     return (
       <div style={{ padding: 30 }}>
-        <Layout>
+        <Layout >
           <Layout>
             <Sider theme="light">
               <Avatar size="large" icon="user" src={user.avatar} />
