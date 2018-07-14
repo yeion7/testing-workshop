@@ -27,4 +27,25 @@ describe('ModalNewUser', () => {
     fireEvent.click(getByText('Crear'))
     expect(onOk).toHaveBeenCalled();
   });
+
+  test('should works', () => {
+    // Render 
+    const onOk = jest.fn()
+    const {debug, getByLabelText, getByText} = 
+      render(<ModalNewUser visible onOk={onOk} />)
+
+    // Acciones
+    
+    const user = getByLabelText('Usuario')
+    user.value = 'Usuario'
+    fireEvent.change(user)
+
+    const description = getByLabelText('Descripción')
+    description.value = 'Descripción'
+    fireEvent.change(description)
+
+    fireEvent.click(getByText('Crear'))
+    expect(getByText('Ingresa un nombre!')).toBeTruthy();
+    expect(onOk).not.toHaveBeenCalled();
+  });
 });
