@@ -11,6 +11,7 @@
 
 1. Pasos para crear una cultura de testing
 2. Qué es un test?
+3. Instalar jest en un [proyecto](https://github.com/Selhar/react-redux-calculator)
 3. Qué son los Matchers y como usarlos?
 4. Crear tests con [jest](https://jestjs.io/) y [react-testing-library](https://github.com/kentcdodds/react-testing-library)
 5. Crear tests con [cypress](https://www.cypress.io/)
