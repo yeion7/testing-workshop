@@ -33,7 +33,6 @@ export default class TimeLine extends Component {
     const { match } = this.props;
     const user = await API.Users.getUser(match.params.id);
     const likes = JSON.parse(localStorage.getItem("liked"));
-
     this.setState({
       user,
       liked: likes && likes[user.id] ? likes[user.id] : []
